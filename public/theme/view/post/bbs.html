@@ -1,0 +1,115 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+	        <div class="panel panel-default" style="padding:10px;">
+		        <h4>{$bbs['title']}</h4>
+		        <span style="color:#aaa"><i class="fa fa-eye">&nbsp;</i>浏览: {$bbs['browser']}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		        <span style="color:#aaa"><i class="fa fa-clock-o">&nbsp;</i>发布日期: {$bbs['sendtime']|date='Y-m-d',###}</span>
+		        <hr />
+		        {$bbs['content']}
+		    </div>
+		    <form action="{:cat_url(url('post/comment'),$bbs['id'])}" method="post" id="ajax-form">
+		        <div class="form-group">
+                    <script id="container" name="content" type="text/plain"></script>
+                </div>
+                <div class="form-group">
+                    <span type="submit" class="btn btn-primary" id="ajax-span">发表你的高见</span>
+                    <button type="submit" class="btn btn-primary" id="ajax-submit" style="display:none">发表你的高见</button>
+                </div>
+		    </form>
+		    <div class="panel panel-default">
+		        <div class="panel-heading"><h3 class="panel-title">评论</h3></div>
+		        <div style="padding:0 10px 0 10px">
+		        <table class="table" style="padding:0 10px">
+		            {volist name='list' id='comment'}
+		            <tr><td>           
+		                 <div class="media">
+						  <div class="media-left">
+						      <img class="media-object img-circle" src="{$comment['avatar']}" alt="头像" style="width:40px">
+						  </div>
+						  <div class="media-body">
+						    <span class="media-heading" style="color:#89bdd3;font-size:14px"><i class="fa fa-user">&nbsp;</i>{$comment['user_login']}&nbsp;&nbsp;&nbsp;</span><span style="color:#aaa;font-size:12px"><i class="fa fa-clock-o">&nbsp;</i>{$comment['sendtime']|date='y-m-d h:i:sa',###}</span>
+						    <p>{$comment['content']}</p>
+						  </div>
+						</div>           
+		            </td></tr>
+		            {/volist}
+		        </table> 
+		        </div>       
+		    </div>
+	    </div>
+	    <div class="col-md-3">
+	        <div class="panel panel-default" style="padding:10px">
+	            <div class="media">
+				  <div class="media-left">
+				    <a href="#">
+				      <img class="media-object img-circle" src="{$user_mem['avatar']}" alt="头像" style="width:40px">
+				    </a>
+				  </div>
+				  <div class="media-body">
+				    <h4 class="media-heading">{$user_mem['user_login']}</h4>
+				    <span>积分: {$user_mem['score']}</span>
+				  </div>
+				</div>
+	        </div>
+	    </div>
+    </div>
+</div>
+<script src="__STATIC__/js/jquery.min.js"></script>
+<script src="__STATIC__/js/bootstrap.min.js"></script>
+<script src="__STATIC__/js/jquery.form.min.js"></script>
+<script src="__STATIC__/js/noty/jquery.noty.min.js"></script>
+<script src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<script>
+var ue = UE.getEditor('container',{
+	toolbars:[['bold', 'italic', 'underline','fontfamily','fontsize','emotion']],
+	initialFrameHeight:200,
+});
+$(function(){
+	$('#ajax-span').on('click',function(){
+		var txt = ue.getContentTxt();
+		if(txt.length<3){
+			noty({
+                text: '评论不能低于三个字',
+                type: 'error',
+                layout: 'topCenter',
+                timeout: 1000,                            
+            });
+			return;
+		}else{
+			$('#ajax-submit').click();
+		}
+	});
+	var options = {
+			success:function(data,statusText){
+				if(data.code>0){
+					noty({
+                        text: data.msg,
+                        type: 'success',
+                        layout: 'center',
+                        timeout: 1000,                            
+                        callback:{
+                        	afterClose:function(){
+                        		//window.location.href = data.url;
+                        		window.location.reload();
+                        	}
+                        }
+                    });
+				}
+				else{
+					noty({
+                        text: data.msg,
+                        type: 'error',
+                        layout: 'topCenter',
+                        timeout: 1000,                            
+                    });
+				}
+			}
+	}
+	$('#ajax-form').submit(function(){		
+		$(this).ajaxSubmit(options);
+		return false;
+	});
+})
+</script>

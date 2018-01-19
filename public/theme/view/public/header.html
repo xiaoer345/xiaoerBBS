@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>小二论坛</title>
+
+    <!-- HTML5 shim for IE8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <![endif]-->
+    
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="__STATIC__/js/layui/css/modules/layer/default/layer.css">
+    <style>
+    body{
+	margin-top:20px;
+    }
+    .pagination{
+	margin-top:0px;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{:url('index/index')}">小二论坛</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{:url('index/index')}">首页<span class="sr-only">(current)</span></a></li>
+      </ul>
+
+      {if condition="isset($user)">}
+      <ul class="nav navbar-nav navbar-right">
+           {if condition="!empty($user['avatar'])"}
+           <li><img class="img-circle" style="height:40px;margin-top:5px;" src="{$user['avatar']}" alt="头像"></li>
+           {else /}
+           <li><img class="img-circle" style="height:40px;margin-top:5px;" src="__STATIC__/images/avatar.jpg" alt="头像"></li> 
+           {/if} 
+           <li class="dropdown">
+               <a class="dropdown-toggle" href="#" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+               {$user['user_login']}&nbsp;<span class="caret"></span>
+               </a>
+               <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                   <li><a href="{:url('user/index')}"><i class="fa fa-user"></i>&nbsp;我的主页</a></li>
+                   <li><a href="{:url('index/logout')}"><i class="fa fa-lock"></i>&nbsp;退出</a></li>
+               </ul>
+           </li>
+      </ul>
+      {else /}
+	  <ul class="nav navbar-nav navbar-right">
+          <li><a href="{:url('index/login')}">登录</a></li>
+	      <li><a href="{:url('index/signup')}">注册</a></li>
+	  </ul>
+      {/if}
+    </div>
+  </div>
+</nav>
+</div>

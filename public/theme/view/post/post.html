@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>小二论坛</title>
+
+    <!-- HTML5 shim for IE8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <![endif]-->
+    
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+<body>
+
+
+<div class="container" style="margin-top:10px">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form action={:url('post/doPost')} method="post" id="ajax-form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="标题" autocomplete="on" required>
+                </div>
+                <div class="form-group">
+	                <select class="form-control" name="class">
+					  <option>Javascript</option>
+					  <option>PHP</option>
+					  <option>随想</option>
+					</select>
+				</div>
+                <div class="form-group">
+                    <script id="container" name="content" type="text/plain"></script>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="发布" class="btn btn-primary" id="ajax-submit">
+                </div>                
+            </form>
+        </div>      
+    </div>
+</div>
+<script src="__STATIC__/js/jquery.min.js"></script>
+<script src="__STATIC__/js/bootstrap.min.js"></script>
+<script src="__STATIC__/js/jquery.form.min.js"></script>
+<script src="__STATIC__/js/noty/jquery.noty.min.js"></script>
+<script src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<!--  script>
+var E = window.wangEditor
+var editor = new E('#editor')
+editor.customConfig.uploadImgServer = '/bbs/public/index/post/upload';
+editor.customConfig.uploadImgShowBase64 = true;
+editor.customConfig.uploadFileName = 'file';
+editor.create();
+</script-->
+<script type="text/javascript">
+    var ue = UE.getEditor('container');
+    (function(){
+    	var options = {
+				success:function(data,statusText){
+					if(data.code>0){
+						noty({
+                            text: data.msg,
+                            type: 'success',
+                            layout: 'center',
+                            timeout: 1000,                            
+                            callback:{
+                            	afterClose:function(){
+                            		//window.location.href = data.url;
+                            		window.location.reload();
+                            	}
+                            }
+                        });
+					}
+					else{
+						noty({
+                            text: data.msg,
+                            type: 'error',
+                            layout: 'topCenter',
+                            timeout: 1000,                            
+                        });
+					}
+				}
+		}
+		$('#ajax-form').submit(function(){
+			$(this).ajaxSubmit(options);
+			return false;
+		});
+    	
+    })();
+</script>
+</body>
+</html>

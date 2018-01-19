@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>小二论坛/注册</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="__STATIC__/css/animate.css">
+	<link rel="stylesheet" href="__STATIC__/css/style.css">
+	</head>
+	<body class="style-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<form action="{:url('index/doSignUp')}" class="fh5co-form animate-box" id="ajax-form" data-animate-effect="fadeInLeft" method="post">
+						<h2 style="text-align:center;">注册小二论坛</h2>
+						<div class="form-group">
+							<label for="name" class="sr-only">用户名</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="用户名" autocomplete="off" required>
+							<label id="name_hint" style="color:red;fonct-size:10px;display:none">这个用户名太受欢迎了，换一个吧</label>
+						</div>
+						<div class="form-group">
+							<label for="email" class="sr-only">邮箱</label>
+							<input type="email" class="form-control" id="email" name="email" placeholder="邮箱" autocomplete="off" required>
+							<label id="email_hint" style="color:red;fonct-size:10px;display:none">邮箱已被注册，换一个吧</label>
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">密码(最少六位)</label>
+							<input type="password" class="form-control" id="password" name="password" minlength="6" onchange="checkPassword()" placeholder="密码(最少六位)" autocomplete="off" required>
+						</div>
+						<div class="form-group">
+							<label for="re-password" class="sr-only">重新输入密码</label>
+							<input type="password" class="form-control" id="re-password" name="re-password" onchange="checkPassword()" placeholder="重新输入密码" autocomplete="off" required>
+						</div>
+						<div class="form-group">
+							<p>已有账号? <a href="{:url('index/login')}">去登陆</a></p>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="注册" class="btn btn-primary" id="ajax-submit" id='btn' style="width:100%">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>	
+	<script src="__STATIC__/js/jquery.min.js"></script>
+	<script src="__STATIC__/js/bootstrap.min.js"></script>
+	<script src="__STATIC__/js/jquery.form.min.js"></script>
+	<script src="__STATIC__/js/noty/jquery.noty.min.js"></script>
+	<script>
+		function checkPassword(){
+			//表单密码验证
+			var pass = document.getElementById('password');
+			var repass = document.getElementById('re-password');
+			if(pass.value!==repass.value){
+				repass.setCustomValidity('两次输入密码不一致!');
+			}
+			else{
+				repass.setCustomValidity('');
+			}
+		}
+		$(function(){
+			//异步提交表单信息
+			var name_hint = $('#name_hint');
+			var email_hint = $('#email_hint');
+			var options = {
+				success:function(data,statusText){
+					if(data.code>0){
+						noty({
+                            text: data.msg,
+                            type: 'success',
+                            layout: 'topCenter',
+                            timeout: 1000,                            
+                            callback:{
+                            	afterClose:function(){
+                            		window.location.href = data.url;
+                            	}
+                            }
+                        });
+					}
+					else{
+						if(data.data == 'name'){
+							name_hint.css('display','block');
+						}else{
+							email_hint.css('display','block');
+						}
+					}
+				}
+			}
+			$('#ajax-form').submit(function(){
+				$(this).ajaxSubmit(options);
+				return false;
+			})
+		})
+	</script>
+	</body>
+</html>
+

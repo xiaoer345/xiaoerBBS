@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>小二论坛/登录</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="__STATIC__/css/animate.css">
+	<link rel="stylesheet" href="__STATIC__/css/style.css">
+
+	</head>
+	<body class="style-3">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<form action="{:url('index/doLogin')}" class="fh5co-form animate-box" id="ajax-form" data-animate-effect="fadeIn" method="post">
+						<h2 style="text-align:center;">登录小二论坛</h2>
+						<div class="form-group">
+							<label for="username" class="sr-only">用户名</label>
+							<input type="text" class="form-control" id="username" name="username" placeholder="用户名或邮箱" value="{:cookie('username')}" autocomplete="on" required>
+						</div>
+						<div class="form-group">
+							<label for="password" class="sr-only">密码</label>
+							<input type="password" class="form-control" id="password" name="password" placeholder="密码" autocomplete="off" required>
+						</div>
+						
+						<div class="form-group">
+                            <div style="position: relative;">
+                                <input type="text" name="captcha" placeholder="验证码" class="form-control captcha" required>
+                                <div><img id="verify_img" height="40" width="150" font-size="22"
+                                     style="cursor: pointer;position:absolute;right:1px;top:1px;" src="{:captcha_src()}" alt="captcha" /></div>
+                            </div>
+                        </div>						
+						<div class="form-group">
+							<label for="remember"><input type="checkbox" id="remember" name="remember" checked="checked">记住我</label>
+						</div>
+						<div class="form-group">
+							<p>还没有账号？ <a href="{:url('index/signup')}">去注册</a></p>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="登录" class="btn btn-primary" id="ajax-submit" style="width:100%">
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>	
+	<script src="__STATIC__/js/jquery.min.js"></script>
+	<script src="__STATIC__/js/bootstrap.min.js"></script>
+	<script src="__STATIC__/js/jquery.form.min.js"></script>
+	<script src="__STATIC__/js/noty/jquery.noty.min.js"></script>
+	<script>
+	    ;(function(){
+	    	$('#verify_img').on('click',function(){
+	    		$(this).attr("src","{:captcha_src()}?id=Math.random()");
+	    	})
+	    	
+	    	//异步提交表单信息
+			var options = {
+				success:function(data,statusText){
+					if(data.code>0){
+						noty({
+                            text: data.msg,
+                            type: 'success',
+                            layout: 'topCenter',
+                            timeout: 1000,                            
+                            callback:{
+                            	afterClose:function(){
+                            		window.location.href = data.url;
+                            	}
+                            }
+                        });
+					}
+					else{
+						noty({
+                            text: data.msg,
+                            type: 'error',
+                            layout: 'topCenter',
+                            timeout: 1000,                            
+                            callback:{
+                            	afterClose:function(){
+                            		$('#verify_img').attr("src","{:captcha_src()}?id=Math.random()");
+                            	}
+                            }
+                        });
+					}
+				}
+			}
+			$('#ajax-form').submit(function(){
+				$(this).ajaxSubmit(options);
+				return false;
+			})
+	    })();
+	</script>
+	</body>
+</html>
+

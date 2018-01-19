@@ -1,0 +1,168 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+               <div class="panel-heading">Javascript</div>
+               <div class="panel-body">{$board[0]["pcard"]}
+               <a href="">帖子({$board[0]['count']})</a>
+               </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-success">
+               <div class="panel-heading">PHP</div>
+               <div class="panel-body">{$board[1]["pcard"]}
+               <a href="">帖子({$board[1]['count']})</a>
+               </div>
+            </div>
+        </div>        
+        <div class="col-md-4">
+            <div class="panel panel-info">
+               <div class="panel-heading">随想</div>
+               <div class="panel-body">{$board[2]["pcard"]}
+               <a href="">帖子({$board[2]['count']})</a>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+			  <div class="panel-heading">最新帖子</div>
+			  <table class="table" style="table-layout:fixed">
+			      <tr>
+			          <th width="50%">标题</th>
+			          <th>版块</th>
+			          <th>发布者</th>
+			          <th>浏览</th>
+			          <th>回复</th>
+			      </tr>
+			      {volist name='list' id='bbs'}
+			      <tr>
+			          <td style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">
+			          <a href="{:cat_url(url('post/bbs'),$bbs['id'])}">{$bbs['title']}</a>
+			          </td>
+			          <td>{$bbs['name']}</td>
+			          <td>{$bbs['user_login']}</td>
+			          <td>{$bbs['browser']}</td>
+			          <td>{$bbs['back']}</td>
+			      </tr>
+			      {/volist}
+			  </table>			  
+        </div>
+        {$list->render()}
+    </div>
+    <div class="col-md-4">
+        <div style="text-align:center;margin-bottom:20px;">
+            <form action={:url('post/post')} id="ajax-form">
+                {if condition="!empty(cookie('is_signed'))&&!empty(session('id'))"}
+                <span class="btn btn-success" style="width:40%" disabled="disabled">已签到</span>
+                {else /}
+                <span class="btn btn-success" style="width:40%" id="sign">签到</span>
+                {/if}
+                <input type="submit" value="发帖" class="btn btn-primary" id="ajax-submit"style="width:40%">               
+            </form>
+            
+        </div>
+        <div class="panel panel-primary">
+			  <div class="panel-heading">热帖</div>
+			  <table class="table" style="table-layout:fixed">
+			    {volist name="hot" id="bbs1"}
+			    <tr><td style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a href="{:cat_url(url('post/bbs'),$bbs1['id'])}">{$bbs1['title']}</a></td></tr>
+			    {/volist}
+			  </table>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script src="__STATIC__/js/jquery.min.js"></script>
+<script src="__STATIC__/js/bootstrap.min.js"></script>
+<script src="__STATIC__/js/jquery.form.min.js"></script>
+<script src="__STATIC__/js/noty/jquery.noty.min.js"></script>
+<script src="__STATIC__/js/layui/lay/modules/layer.js"></script>
+<script>
+;(function(){	
+	//异步提交表单信息
+	var options = {
+		success:function(data,statusText){
+			if(data.code>0){
+				//window.location.href = data.url;
+				layer.open({
+					type: 2,
+					title: '发帖',
+					content: data.url,
+					area: ['85%', '90%'],
+					cancel: function(index, layero){ 
+						window.location.reload();
+						return false; 
+					} 
+				});
+			}
+			else{
+				noty({
+                    text: data.msg,
+                    type: 'error',
+                    layout: 'topCenter',
+                    timeout: 1000, 
+                });
+			}
+		}
+	}
+	$('#ajax-form').submit(function(){
+		$(this).ajaxSubmit(options);
+		return false;
+	});
+	//签到
+	$('#sign').on('click',function(){
+		$.ajax({
+			url: 'http://localhost/bbs/public/index/user/sign',
+			type: 'post',
+			data: {
+				is_signed: true
+			}
+		}).done(function(data){
+			if(data.code>0){
+				noty({
+					text: data.msg,
+					type: 'success',
+					layout: 'center',
+					timeout: 1000,
+					callback:{
+	                	afterClose:function(){
+	                		window.location.reload();
+	                	}
+	                }
+				});
+			}else{
+				noty({
+					text: data.msg,
+					type: 'error',
+					layout: 'topCenter',
+					timeout: 1000,
+				});
+			}
+			
+		});
+	});
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
