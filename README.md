@@ -7,5 +7,10 @@
 整个项目后台都是由tp5开发
 前台js库主要是jQuery，表单提交采用jQuery.form异步提交，提示库采用noty库，富文本编辑器采用百度Ueditor，界面库采用bootstrap
 以下是一些图示
-
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/register.png)
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/login.png)
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/home.png)
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/user.png)
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/post.png)
+![image](https://github.com/jitaoneng/xiaoerBBS/raw/master/%E5%9B%BE%E7%A4%BA/sign.png)
 
