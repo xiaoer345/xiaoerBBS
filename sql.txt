@@ -1,0 +1,46 @@
+CREATE TABLE `user` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `sex` tinyint(2) NOT NULL default '0' COMMENT '性别;0:保密,1:男,2:女',
+  `last_login_time` int(11) NOT NULL default '0' COMMENT '最后登录时间',
+  `score` int(11) NOT NULL default '0' COMMENT '用户积分',
+  `create_time` int(11) NOT NULL default '0' COMMENT '注册时间',
+  `user_login` varchar(60) character set utf8 collate utf8_unicode_ci NOT NULL default '' COMMENT '用户名',
+  `user_pass` varchar(64) NOT NULL default '' COMMENT '登录密码',
+  `user_nickname` varchar(50) character set utf8 collate utf8_unicode_ci NOT NULL default '' COMMENT '用户昵称',
+  `user_email` varchar(100) NOT NULL default '' COMMENT '用户登录邮箱',
+  `avatar` varchar(255) NOT NULL default '' COMMENT '用户头像',
+  `signature` varchar(255) NOT NULL default '' COMMENT '个性签名',
+  `last_login_ip` varchar(15) NOT NULL default '' COMMENT '最后登录ip',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
+CREATE TABLE `board` (
+  `id` smallint(2) unsigned NOT NULL auto_increment,  
+  `name` varchar(40) NOT NULL COMMENT '板块名称',
+  `master` varchar(50) NOT NULL COMMENT '版主',
+  `pcard` varchar(200) NOT NULL COMMENT '板块公告',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='论坛版块表';
+
+CREATE TABLE `bbs` (
+  `id` bigint(20) unsigned NOT NULL auto_increment, 
+  `board_id` smallint(2) NOT NULL COMMENT '帖子所属版块', 
+  `title` varchar(60) NOT NULL COMMENT '帖子主题',
+  `content` varchar(2000) NOT NULL COMMENT '帖子内容',
+  `user_id` bigint(20) NOT NULL COMMENT '发帖者',
+  `sendtime` int(11) NOT NULL COMMENT '发帖时间',
+  `istop` tinyint(2) NOT NULL COMMENT '是否置顶,0=>非置顶,1=>置顶',
+  `isgood` tinyint(2) NOT NULL COMMENT '是否精华,0=>非精华,1=>精华',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='论坛帖子表';
+
+
+CREATE TABLE `comment` (
+  `id` bigint(20) unsigned NOT NULL auto_increment, 
+  `bbs_id` bigint(20) NOT NULL COMMENT '回复根帖', 
+  `content` varchar(2000) NOT NULL COMMENT 回复内容',
+  `user_id` bigint(20) NOT NULL COMMENT '回复者',
+  `sendtime` int(11) NOT NULL COMMENT '回复时间',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='论坛帖子回复表';
